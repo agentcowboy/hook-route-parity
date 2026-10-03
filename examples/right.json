@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "PreToolUse": [{"matcher": "Read", "hooks": [
+      {"type": "command", "command": "python3", "args": ["check-input.py"], "if": "Bash(git *)"}
+    ]}],
+    "PostToolUse": [{"hooks": [{"type": "command", "command": "sh after-tool.sh"}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "sh finish.sh"}]}]
+  }
+}

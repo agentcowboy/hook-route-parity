@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+python3 -E -B "$repo_dir/tests/test_hook_route_parity.py"
+printf '%s\n' 'HOOK_ROUTE_PARITY ACCEPTANCE PASS'

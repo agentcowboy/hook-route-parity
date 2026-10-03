@@ -1,0 +1,8 @@
+{
+  "hooks": {
+    "PreToolUse": [{"matcher": "Bash", "hooks": [
+      {"type": "command", "command": "python3", "args": ["check-input.py"], "if": "Bash(git *)"}
+    ]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "sh finish.sh"}]}]
+  }
+}
