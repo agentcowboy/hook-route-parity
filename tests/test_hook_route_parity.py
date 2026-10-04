@@ -196,6 +196,15 @@ def examples_drift() -> None:
     assert (result.returncode, result.stdout, result.stderr) == (1, expected, "")
 
 
+def filechanged_star_differs_from_omitted() -> None:
+    check_case("pretooluse_star_normalizes", config(HANDLER),
+               config(HANDLER, "*"), 0, pass_line(1))
+    check_case("filechanged_empty_normalizes", config(HANDLER, event="FileChanged"),
+               config(HANDLER, "", "FileChanged"), 0, pass_line(1))
+    check_case("filechanged_star_literal", config(HANDLER, event="FileChanged"),
+               config(HANDLER, "*", "FileChanged"), 1, drift_line("FileChanged"))
+
+
 def load_tests(loader: object, tests: object, pattern: object) -> unittest.TestSuite:
     suite = unittest.TestSuite()
     for case in CASES:
@@ -203,7 +212,8 @@ def load_tests(loader: object, tests: object, pattern: object) -> unittest.TestS
         test.__name__ = case[0]
         suite.addTest(unittest.FunctionTestCase(test, description=case[0]))
     suite.addTests(unittest.FunctionTestCase(test, description=test.__name__) for test in
-                   (commands_never_execute, usage_errors, event_name_controls, examples_drift))
+                   (commands_never_execute, usage_errors, event_name_controls, examples_drift,
+                    filechanged_star_differs_from_omitted))
     return suite
 
 
@@ -211,11 +221,11 @@ if __name__ == "__main__":
     suite = load_tests(None, None, None)
     log = io.StringIO()
     result = unittest.TextTestRunner(stream=log).run(suite)
-    if (result.testsRun != 63 or result.failures or result.errors or result.skipped):
+    if (result.testsRun != 64 or result.failures or result.errors or result.skipped):
         # Case names identify failures without dumping fixture values or paths.
         for test, detail in result.failures + result.errors:
             print("FAIL " + test.shortDescription(), file=sys.stderr)
         print(f"run={result.testsRun} failures={len(result.failures)} "
               f"errors={len(result.errors)} skips={len(result.skipped)}", file=sys.stderr)
         raise SystemExit(1)
-    print("HOOK_ROUTE_PARITY TESTS run=63 failures=0 errors=0 skips=0")
+    print("HOOK_ROUTE_PARITY TESTS run=64 failures=0 errors=0 skips=0")

@@ -6,7 +6,8 @@ Compare declared hook routes — event, matcher, command, args and if — in two
 under `hooks → event → matcher groups → hooks array`. It never runs configured commands.
 
 Commands lose only outer ASCII whitespace. Matchers omitted, `""`, or `"*"` normalize
-to `""`; matcher-ignoring events also normalize to `""`, following the
+to `""`, except for `FileChanged`: there `"*"` also adds a literal file named `*` to the watch list,
+so it stays distinct from an omitted matcher. Matcher-ignoring events also normalize to `""`, following the
 [hooks documentation](https://code.claude.com/docs/en/hooks) fetched 2026-10-03.
 Matcher-ignoring events: `UserPromptSubmit`, `PostToolBatch`, `Stop`, `TeammateIdle`, `TaskCreated`, `TaskCompleted`, `WorktreeCreate`, `WorktreeRemove`, `MessageDisplay`, `CwdChanged`.
 Unknown events compare literally. No paths, variables, or regexes are expanded.
@@ -52,7 +53,7 @@ including disclosure canaries in both output streams. Failures or skipped tests
 prevent the final PASS line. Success exits 0 and prints exactly:
 
 ```text
-HOOK_ROUTE_PARITY TESTS run=63 failures=0 errors=0 skips=0
+HOOK_ROUTE_PARITY TESTS run=64 failures=0 errors=0 skips=0
 HOOK_ROUTE_PARITY ACCEPTANCE PASS
 ```
 
@@ -65,3 +66,5 @@ two existing files without adopting a generator or hook framework.
 MIT licensed, copyright 2026 agentcowboy.
 
 Built with AI coding agents.
+
+v0.1.1: `FileChanged` keeps `"*"` distinct from an omitted or empty matcher.

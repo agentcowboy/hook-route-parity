@@ -29,7 +29,7 @@ def routes(settings: object) -> set:
             require(isinstance(registration, dict), "matcher group must be an object")
             matcher = registration.get("matcher", "")
             require(isinstance(matcher, str), "matcher must be a string")
-            if matcher == "*" or event in MATCHER_IGNORING_EVENTS:
+            if (matcher == "*" and event != "FileChanged") or event in MATCHER_IGNORING_EVENTS:
                 matcher = ""
             handlers = registration.get("hooks")
             require(isinstance(handlers, list), "hooks array must be a list")
